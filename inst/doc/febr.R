@@ -16,9 +16,9 @@ panderOptions("table.split.table", Inf)
 #  devtools::install_github(repo = "febr-team/febr-package")
 
 ## ---- echo=FALSE, results='asis', eval=TRUE------------------------------
-ver <- readLines("../DESCRIPTION")
-idx <- sapply(ver, function (x) grepl(pattern = "Version:", x = x))
-ver <- gsub(pattern = "Version: ", replacement = "", ver[idx])
+# ver <- readLines("./DESCRIPTION")
+# idx <- sapply(ver, function (x) grepl(pattern = "Version:", x = x))
+# ver <- gsub(pattern = "Version: ", replacement = "", ver[idx])
 rbind(
   c("`header`", "Estrutural", "Descarregar o cabeçalho das tabelas de dados"),
   c("`standard`", "Estrutural", glue("Descarregar os padrões de codificação e nomenclatura do ___febr___")),
@@ -33,7 +33,8 @@ rbind(
   c("`goto`", "Auxiliar", glue("Visitar páginas do ___febr___ na Internet"))
   ) %>% 
   pandoc.table(
-    caption = glue::glue("Funções disponíveis no pacote `febr` versão {ver}."),
+    # caption = glue::glue("Funções disponíveis no pacote `febr` versão {ver}."),
+    caption = glue::glue("Funções disponíveis no pacote `febr` versão 1.0-0."),
     col.names = c("Função", "Grupo", "Descrição"))
 
 ## ------------------------------------------------------------------------

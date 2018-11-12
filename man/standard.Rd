@@ -11,7 +11,7 @@ standard(table, variable, unit, precision, expr)
 \emph{observation} table, \code{"observacao"}.}
 
 \item{variable}{(optional) Character vector indicating one or more variables. Accepts both specific
-identification codes, e.g. \code{"ferro_oxalato_icpoes"} and \code{"carbono_dicromato_30min150_mohr"}, as well as
+identification codes, e.g. \code{"ferro_oxalato_icpoes"} and \code{"carbono_cromo_30min150_mohr"}, as well as
 general identification codes, e.g. \code{"ferro"} and \code{"carbono"}.}
 
 \item{unit}{(optional) Character vector indicating one or more measurement units. For example, \code{"g/kg"},
@@ -26,17 +26,16 @@ general identification codes, e.g. \code{"ferro"} and \code{"carbono"}.}
 A data frame with standards for selected variable(s).
 }
 \description{
-Download data from the \emph{standard} ("padrao") table of the Free Brazilian Repository for Open Soil Data --
+Download data from the standard ("febr-padrao") table of the Free Brazilian Repository for Open Soil Data
+
 \emph{\strong{febr}}, \url{http://www.ufsm.br/febr}. This includes codes and names of variable, measurement units,
 number of decimal places, type of data, and description of analytical methods. This is used to standardize
 the data contained in a dataset when downloading it via \code{\link[febr]{layer}} or
 \code{\link[febr]{observation}}.
 }
 \examples{
-\donttest{
 res <- standard(variable = "ferro")
 head(res)
-}
 }
 \references{
 Teixeira, P. C., Donagemma, G. K., Fontana, A., Teixeira, W. G. (2017)

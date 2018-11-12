@@ -10,7 +10,7 @@
 #' @template metadata_template
 #'
 #' @param missing (optional) List with named sub-arguments indicating what should be done with a layer missing
-#' data on sampling depth, `depth`, or data on variable(s), `data`? Options are `"keep"` (default) and `"drop"`.
+#' data on sampling depth, `depth`, or data on variable(s), `data`. Options are `"keep"` (default) and `"drop"`.
 #' 
 #' @param standardization (optional) List with named sub-arguments indicating how to perform data 
 #' standardization.
@@ -73,9 +73,9 @@
 #' \itemize{
 #' \item \code{dataset_id}. Identification code of the dataset in ___febr___ to which an observation belongs.
 #' \item \code{observacao_id}. Identification code of an observation in ___febr___.
-#' \item \code{camada_numero}. Sequential layer number, from top to bottom.
+#' \item \code{camada_id}. Sequential layer number, from top to bottom.
 #' \item \code{camada_nome}. Layer designation according to some standard description guide.
-#' \item \code{amostra_codigo}. Laboratory number of a sample.
+#' \item \code{amostra_id}. Laboratory number of a sample.
 #' \item \code{profund_sup}. Upper boundary of a layer (cm).
 #' \item \code{profund_inf}. Lower boundary of a layer (cm).
 #' }
@@ -275,12 +275,19 @@ layer <-
       }
     }
     
+    ## dataset + stack
+    if (stack && length(dataset) == 1 && dataset != "all") {
+      stop ("data cannot be stacked when downloading a single dataset")
+    }
+    
     # PADRÕES
     ## Descarregar tabela com unidades de medida e número de casas decimais quando padronização é solicitada
     ## ou quando empilhamento é solicitado
     if (standardization$units || stack) {
-      febr_stds <- .getTable(x = "1Dalqi5JbW4fg9oNkXw5TykZTA39pR5GezapVeV0lJZI")
-      febr_unit <- .getTable(x = "1tU4Me3NJqk4NH2z0jvMryGObSSQLCvGqdLEL5bvOflo")
+      # febr_stds <- .getTable(x = "1Dalqi5JbW4fg9oNkXw5TykZTA39pR5GezapVeV0lJZI")
+      # febr_unit <- .getTable(x = "1tU4Me3NJqk4NH2z0jvMryGObSSQLCvGqdLEL5bvOflo")
+      febr_stds <- .getStds()
+      febr_unit <- .getUnits()
     }
     
     ## stack + stadardization
@@ -318,6 +325,7 @@ layer <-
       # DESCARREGAMENTO
       ## Cabeçalho com unidades de medida
       unit <- .getHeader(x = sheets_keys$camada[i])
+      
       ## Dados
       tmp <- .getTable(x = sheets_keys$camada[i])
       n_rows <- nrow(tmp)
@@ -351,7 +359,8 @@ layer <-
         }
         cols <- c(cols, extra_cols)
         tmp <- tmp[, cols]
-        unit <- unit[names(unit) %in% cols]
+        # unit <- unit[names(unit) %in% cols]
+        unit <- unit[, cols]
         
         # LINHAS I
         ## Avaliar limpeza das linhas
@@ -372,7 +381,7 @@ layer <-
           }
           
           # TIPO DE DADOS
-          ## "observacao_id", "camada_numero", "camada_nome", "amostra_codigo", "profund_sup" e "profund_inf"
+          ## "observacao_id", "camada_id", "camada_nome", "amostra_id", "profund_sup" e "profund_inf"
           ## precisam estar no formato de caracter para evitar erros durante o empilhamento das tabelas
           ## devido ao tipo de dado.
           ## Nota: esse processamento deve ser feito via Google Sheets.
@@ -401,7 +410,7 @@ layer <-
           }
           
           ## Repetições de laboratório
-          ## O padrão consiste em manter as repetições de laboratório. Do contrário, a coluna 'camada_numero' 
+          ## O padrão consiste em manter as repetições de laboratório. Do contrário, a coluna 'camada_id' 
           ## é a chave para o processamento dos dados. Note que é necessário que o tipo de dado das variáveis
           ## esteja corretamente definido, sobretudo no caso de variáveis contínuas. A solução prévia do 
           ## símbolo indicador do limite inferior de detecção geralmente é necessária.
@@ -428,23 +437,30 @@ layer <-
           }
           
           # PADRONIZAÇÃO II
-          ## Unidade de medida e número de casas decimais
-          if (standardization$units) {
+          ## Unidade de medida e número de casas decimais de colunas adicionais
+          if (standardization$units && length(extra_cols) >= 1) {
             
             ## Identificar variáveis contínuas (classe 'numeric' e 'integer'), excluíndo variáveis de 
             ## identificação padrão
             id_class <- sapply(tmp, class)
-            id_con <- which(id_class %in% c("numeric", "integer") & !names(id_class) %in% std_cols)
-            if (length(id_con) >= 1) {
-              tmp_stds <- match(cols[id_con], febr_stds$campo_id)
+            cont_idx <- which(id_class %in% c("numeric", "integer") & !names(id_class) %in% std_cols)
+            if (length(cont_idx) >= 1) {
+              
+              # Tabela com padrões das variáveis contínuas identificadas
+              tmp_stds <- match(cols[cont_idx], febr_stds$campo_id)
               tmp_stds <- febr_stds[tmp_stds, c("campo_id", "campo_unidade", "campo_precisao")]
               
               ## 1. Se necessário, padronizar unidades de medida
-              idx_unit <- unit[cols[id_con]] != tmp_stds$campo_unidade
-              if (any(idx_unit)) {
-                idx_unit <- colnames(idx_unit)[idx_unit]
-                source <- unit[idx_unit]
-                target <- tmp_stds$campo_unidade[match(idx_unit, tmp_stds$campo_id)]
+              # idx_unit <- unit[cols[cont_idx]] != tmp_stds$campo_unidade
+              # idx_unit <- unit[, cols[cont_idx]] != tmp_stds$campo_unidade
+              need_idx <- unit[2, cols[cont_idx]] != tmp_stds$campo_unidade # verifica a 2ª linha de metadados
+              if (any(need_idx)) {
+                # idx_unit <- colnames(idx_unit)[idx_unit]
+                need_name <- cols[cont_idx][need_idx]
+                # source <- unit[idx_unit]
+                # source <- unit[2, idx_unit]
+                source <- unit[2, need_name]
+                target <- tmp_stds$campo_unidade[match(need_name, tmp_stds$campo_id)]
                 
                 ## Identificar constante
                 k <- lapply(seq_along(source), function (i) {
@@ -455,8 +471,10 @@ layer <-
                 k <- do.call(rbind, k)
                 
                 ## Processar dados
-                tmp[idx_unit] <- mapply(`*`, tmp[idx_unit], k$unidade_constante)
-                unit[idx_unit] <- k$unidade_destino
+                # tmp[idx_unit] <- mapply(`*`, tmp[idx_unit], k$unidade_constante)
+                tmp[need_name] <- mapply(`*`, tmp[need_name], k$unidade_constante)
+                # unit[idx_unit] <- k$unidade_destino
+                unit[2, need_name] <- k$unidade_destino
               }
               
               ## 2. Se necessário, padronizar número de casas decimais
@@ -470,12 +488,18 @@ layer <-
           
           # ATTRIBUTOS I
           ## Processar unidades de medida
-          unit <- c("unitless", as.character(unit[names(unit) %in% cols]))
-          unit <- gsub("^-$", "unitless", unit)
+          unit[2, ] <- as.character(unit[2, names(unit) %in% cols])
+          unit[2, ] <- gsub("^-$", "unitless", unit[2, ])
+          # unit["observacao_id"] <- c("Identificação da observação", "unitless")
+          # dataset_id <- c("Identificação do conjunto de dados", "unitless")
+          # https://en.wikipedia.org/wiki/List_of_Unicode_characters
+          unit["observacao_id"] <- c("Identifica\u00E7\u00E3o da observa\u00E7\u00E3o", "unitless")
+          dataset_id <- c("Identifica\u00E7\u00E3o do conjunto de dados", "unitless")
+          unit <- cbind(dataset_id, unit)
           
           # HARMONIZAÇÃO I
           ## Harmonização dos dados das colunas adicionais
-          if (harmonization$harmonize) {
+          if (harmonization$harmonize && length(extra_cols) >= 1) {
             
             ## Harmonização baseada nos níveis dos códigos de identificação
             tmp <- .harmonizeByName(obj = tmp, extra_cols = extra_cols, harmonization = harmonization)
@@ -487,11 +511,13 @@ layer <-
           res[[i]] <- cbind(dataset_id = as.character(sheets_keys$ctb[i]), tmp, stringsAsFactors = FALSE)
           
           # ATTRIBUTOS II
-          ## Adicionar unidades de medida
           a <- attributes(res[[i]])
-          # a$units <- c("unitless", as.character(unit[names(unit) %in% a$names]))
-          a$units <- unit
-          # a$units <- gsub("^-$", "unitless", a$units)
+          
+          ## Adicionar nomes reais
+          a$field_name <- as.vector(t(unit)[, 1])
+          
+          ## Adicionar unidades de medida
+          a$field_unit <- as.vector(t(unit)[, 2])
           attributes(res[[i]]) <- a
           
           if (progress) {

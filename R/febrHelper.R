@@ -10,11 +10,12 @@
         ),
       layer = list(
         std.cols = 
-          c("observacao_id", "camada_numero", "camada_nome", "amostra_codigo",
+          c("observacao_id", "camada_id", "camada_nome", "amostra_id",
             "profund_sup", "profund_inf")
       ),
       gs = list(
-        comment = "#unidade",
+        # comment = "#unidade",
+        comment = "#metadado>",
         locale = readr::locale(date_names = "pt", decimal_mark = ","),
         na = c("NA", "-", "", "na"),
         verbose = FALSE
@@ -37,7 +38,9 @@
   function (obj) {
     
     # Organizar unidades de medida
-    stack_unit <- lapply(obj, function (x) do.call(rbind, attributes(x)[c("names", "units")]))
+    # stack_unit <- lapply(obj, function (x) do.call(rbind, attributes(x)[c("names", "units")]))
+    stack_unit <- 
+      lapply(obj, function (x) do.call(rbind, attributes(x)[c("names", "field_name", "field_unit")]))
     stack_unit <- do.call(cbind, stack_unit)
     stack_unit <- stack_unit[, !duplicated(stack_unit["names", ])]
     
@@ -46,7 +49,9 @@
     
     # Definir novos atributos
     a <- attributes(res)
-    a$units <- stack_unit["units", ][match(stack_unit["names", ], colnames(res))]
+    # a$units <- stack_unit["units", ][match(stack_unit["names", ], colnames(res))]
+    a$field_unit <- stack_unit["field_unit", ][match(stack_unit["names", ], colnames(res))]
+    a$field_name <- stack_unit["field_name", ][match(stack_unit["names", ], colnames(res))]
     attributes(res) <- a
     
     # Resultado
@@ -243,11 +248,13 @@
 .getHeader <- 
   function (x) {
     res <- googlesheets::gs_key(x = x, verbose = .opt()$gs$verbose)
+    # nmax <- 1
+    nmax <- 2
     res <- suppressMessages(
       googlesheets::gs_read_csv(
-        ss = res, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, n_max = 1))
+        ss = res, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, n_max = nmax))
     res <- as.data.frame(res)
-    res[1, ] <- gsub("#unidade", "-", res[1, ])
+    # res[1, ] <- gsub("#unidade", "-", res[1, ])
     return (res)
   }
 
@@ -259,6 +266,49 @@
       googlesheets::gs_read_csv(
         res, na = .opt()$gs$na, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, 
         comment = .opt()$gs$comment))
+    res <- as.data.frame(res)
+    return (res)
+  }
+
+# Descarregar tabela 'febr-padrao' ----
+.getStds <-
+  function (x) {
+    
+    # Chave de identificação da tabela com padrões
+    x <- "1Dalqi5JbW4fg9oNkXw5TykZTA39pR5GezapVeV0lJZI"
+    res <- googlesheets::gs_key(x = x, verbose = .opt()$gs$verbose)
+    
+    # O símbolo '-' é usado para indicar variáveis que não possuem unidade de medida. Portanto, não pode ser
+    # lido como NA. Na prática, '-' é lido como uma unidade de medida. Do contrário, não é possível realizar a
+    # padronização das unidades de medida quando descarregamos variáveis sem unidades de medida.
+    # Contudo, no campo 'campo_precisao', '-' significa NA.
+    na <- .opt()$gs$na
+    na <- na[-which(na == "-")]
+    res <- suppressMessages(
+      googlesheets::gs_read_csv(
+        res, na = na, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, comment = .opt()$gs$comment))
+    res <- as.data.frame(res)
+    res$campo_precisao <- gsub(pattern = "-", NA_real_, res$campo_precisao)
+    res$campo_precisao <- as.numeric(res$campo_precisao)
+    return (res)
+  }
+
+# Descarregar tabela 'febr-unidade' ----
+.getUnits <-
+  function (x) {
+    
+    # Chave de identificação da tabela com unidade de medida
+    x <- "1tU4Me3NJqk4NH2z0jvMryGObSSQLCvGqdLEL5bvOflo"
+    res <- googlesheets::gs_key(x = x, verbose = .opt()$gs$verbose)
+    
+    # O símbolo '-' é usado para indicar variáveis que não possuem unidade de medida. Portanto, não pode ser
+    # lido como NA. Na prática, '-' é lido como uma unidade de medida. Do contrário, não é possível realizar a
+    # padronização das unidades de medida quando descarregamos variáveis sem unidades de medida.
+    na <- .opt()$gs$na
+    na <- na[-which(na == "-")]
+    res <- suppressMessages(
+      googlesheets::gs_read_csv(
+        res, na = na, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, comment = .opt()$gs$comment))
     res <- as.data.frame(res)
     return (res)
   }
@@ -297,6 +347,7 @@
     sheets_keys <- suppressMessages(
       googlesheets::gs_read(sheets_keys, na = opts$gs$na, verbose = opts$gs$verbose))
     sheets_keys <- .getDataset(sheets_keys = sheets_keys, dataset = dataset)
+    sheets_keys <- sheets_keys[order(sheets_keys$ctb), ]
     
     # Descarregar chaves de identificação das planilhas do repositório
     return (sheets_keys)
