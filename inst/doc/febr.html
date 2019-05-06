@@ -18,47 +18,280 @@
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -68,8 +301,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Repositório Brasileiro Livre para Dados Abertos do Solo – Guia Básico</h1>
-<h4 class="author"><em>Alessandro Samuel-Rosa</em></h4>
-<h4 class="date"><em>11-11-2018</em></h4>
+<h4 class="author">Alessandro Samuel-Rosa</h4>
+<h4 class="date">06-05-2019</h4>
 
 
 <div id="TOC">
@@ -85,19 +318,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="introducao" class="section level1">
 <h1>Introdução</h1>
 <p>O pacote <code>febr</code> (/ˈfɛ.bɾe/) para R <span class="citation">(R Core Team <a href="#ref-r">2017</a>)</span> foi criado para facilitar o acesso aos dados dos conjuntos de dados publicados no Repositório Brasileiro Livre para Dados Abertos do Solo (<a href="http://www.ufsm.br/febr/"><strong><em>febr</em></strong></a>). Ele pode ser descarregado do <a href="https://CRAN.R-project.org/package=febr">CRAN</a> da seguinte maneira:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;febr&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;febr&quot;</span>)</a></code></pre></div>
 <p>Já a versão de desenvolvimento, disponível no <a href="https://github.com/febr-team/febr-package">GitHub</a>, pode ser instalada – usando o pacote <code>devtools</code> <span class="citation">(Wickham e Chang <a href="#ref-devtools">2017</a>)</span> – da seguinte maneira:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(devtools)) {
-  <span class="kw">install.packages</span>(<span class="dt">pkgs =</span> <span class="st">&quot;devtools&quot;</span>)
-}
-devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="dt">repo =</span> <span class="st">&quot;febr-team/febr-package&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(devtools)) {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="kw">install.packages</span>(<span class="dt">pkgs =</span> <span class="st">&quot;devtools&quot;</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="dt">repo =</span> <span class="st">&quot;febr-team/febr-package&quot;</span>)</a></code></pre></div>
 <p>O pacote <code>febr</code> possui três grupos de funções: as funções estruturais, as funções de acesso, e as funções auxiliares – veja tabela abaixo. Uma demonstração básica da forma de uso e aplicações dessas funções é apresentada nas próximas seções.</p>
-<table style="width:85%;">
+<table style="width:86%;">
 <caption>Funções disponíveis no pacote <code>febr</code> versão 1.0-0.</caption>
 <colgroup>
 <col width="22%"></col>
 <col width="18%"></col>
-<col width="44%"></col>
+<col width="45%"></col>
 </colgroup>
 <thead>
 <tr class="header">
@@ -169,71 +402,71 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <h1>Funções estruturais</h1>
 <p>As funções estruturais servem para conhecer a estrutura das tabelas dos conjuntos de dados publicados no <strong><em>febr</em></strong>. Elas também servem para conhecer os padrões de codificação, nomenclatura, unidades de medida e número de casas decimais usados no <strong><em>febr</em></strong>. Todas as funções estruturais são construídas sobre funções do pacote <code>googlesheets</code> <span class="citation">(Bryan e Zhao <a href="#ref-googlesheets">2018</a>)</span>.</p>
 <p>A função <code>header</code> (do inglês, <em>header</em>, para cabeçalho) serve para descarregar o cabeçalho – as duas primeiras linhas – de uma das duas tabelas de dados – <code>observacao</code> ou <code>camada</code> – dos conjuntos de dados. Isso permite verificar quais são as variáveis incluídas nos conjuntos de dados, os códigos de identificação utilizados, e as respectivas unidades de medida. Por exemplo, o cabeçalho completo da tabela <code>camada</code> do conjunto de dados <code>ctb0003</code> é descarregado da seguinte maneira:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cab &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">header</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">table =</span> <span class="st">&quot;camada&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;all&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">cab &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">header</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">table =</span> <span class="st">&quot;camada&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;all&quot;</span>)</a></code></pre></div>
 <p>A função <code>standard</code> (do inglês, <em>standard</em>, para padrão) fornece uma interface para descarregar informações sobre os padrões usados para as variáveis incluídas nas tabelas <code>observacao</code> e <code>camada</code> de todos os conjuntos de dados. Isso inclui a codificação e nomenclatura, a descrição de cada variável, a unidade de medida e o número de casas decimais, o tipo de dado, e a categoria da variável. Tais informações estão organizadas numa planilha disponível em <a href="https://goo.gl/hi77sB" class="uri">https://goo.gl/hi77sB</a>. Por exemplo, caso tenhamos interesse em conhecer os padrões usados no <strong><em>febr</em></strong> para as variáveis <code>argila</code>, <code>densidade</code>, <code>carbono</code> e <code>ph</code>, basta usar o seguinte código:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pad &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">standard</span>(<span class="dt">variable =</span> <span class="kw">c</span>(<span class="st">&quot;argila&quot;</span>, <span class="st">&quot;densidade&quot;</span>, <span class="st">&quot;carbono&quot;</span>, <span class="st">&quot;ph&quot;</span>))</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">pad &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">standard</span>(<span class="dt">variable =</span> <span class="kw">c</span>(<span class="st">&quot;argila&quot;</span>, <span class="st">&quot;densidade&quot;</span>, <span class="st">&quot;carbono&quot;</span>, <span class="st">&quot;ph&quot;</span>))</a></code></pre></div>
 <p>A função <code>unit</code> (do inglês, <em>unit</em>, para unidade) serve de interface para uma planilha – disponível em <a href="https://goo.gl/Vvvsf2" class="uri">https://goo.gl/Vvvsf2</a> – contendo diversas unidades de medida e as constantes utilizadas para a conversão dos dados entre elas. Essas informações são úteis durante o descarregamento dos dados usando as funções <code>observation</code> e <code>layer</code> – veja mais abaixo. Por exemplo, a densidade do solo é comumente expressa em <code>Mg/m^3</code> e <code>kg/dm^3</code>. Para descarregar as constantes de transformação entre essas duas unidades de medida, basta usar o seguinte código:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">uni &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">unit</span>(<span class="dt">source =</span> <span class="st">&quot;Mg/m^3&quot;</span>, <span class="dt">target =</span> <span class="st">&quot;kg/dm^3&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">uni &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">unit</span>(<span class="dt">source =</span> <span class="st">&quot;Mg/m^3&quot;</span>, <span class="dt">target =</span> <span class="st">&quot;kg/dm^3&quot;</span>)</a></code></pre></div>
 </div>
 <div id="funcoes-de-acesso" class="section level1">
 <h1>Funções de acesso</h1>
 <p>As funções de acesso servem para descarregar os dados e metadados dos conjuntos de dados publicados no <strong><em>febr</em></strong>. Isso inclui as tabelas <code>dataset</code>, <code>observacao</code>, <code>camada</code>, e <code>metadado</code>. Assim como as funções estruturais, as funções de acesso também são construídas sobre funções do pacote <code>googlesheets</code> <span class="citation">(Bryan e Zhao <a href="#ref-googlesheets">2018</a>)</span>.</p>
 <p>Os dados sobre um ou mais conjuntos de dados, contidos na tabela <code>dataset</code> (do inglês, <em>dataset</em>, para conjunto de dados), podem ser descarregados usando uma função de mesmo nome. Para isso, basta informar o código de identificação do(s) conjunto(s) de dados que se deseja descarregar – conforme catalogado em <a href="http://www.ufsm.br/febr/catalog/" class="uri">http://www.ufsm.br/febr/catalog/</a> –, por exemplo:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conj &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">dataset</span>(<span class="dt">dataset =</span> <span class="kw">c</span>(<span class="st">&quot;ctb0003&quot;</span>, <span class="st">&quot;ctb0036&quot;</span>))</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">conj &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">dataset</span>(<span class="dt">dataset =</span> <span class="kw">c</span>(<span class="st">&quot;ctb0003&quot;</span>, <span class="st">&quot;ctb0036&quot;</span>))</a></code></pre></div>
 <p>Já os dados sobre os dados contidos em um ou mais conjuntos de dados, armazenados na tabela <code>metadado</code>, podem ser descarregados usando a função <code>metadata</code> (do inglês, <em>metadata</em>, para metadados), por exemplo:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">metadata</span>(<span class="dt">dataset =</span> <span class="kw">c</span>(<span class="st">&quot;ctb0003&quot;</span>, <span class="st">&quot;ctb0036&quot;</span>))</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">meta &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">metadata</span>(<span class="dt">dataset =</span> <span class="kw">c</span>(<span class="st">&quot;ctb0003&quot;</span>, <span class="st">&quot;ctb0036&quot;</span>))</a></code></pre></div>
 <p>Os dados das observações do solo, contidos na tabela <code>observacao</code>, podem ser descarregados usando a função <code>observation</code> (do inglês, <em>observation</em>, para observação). Assim como as funções <code>header</code> e <code>standard</code> vistas acima, a função <code>observation</code> também possui o argumento <code>variable</code>, que permite selecionar as variáveis que devem ser retornadas. Por exemplo, para retornar apenas a variável <code>taxon</code> do conjunto de dados <code>ctb0003</code>, usamos o seguinte código:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">obs &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">observation</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;taxon&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">obs &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">observation</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;taxon&quot;</span>)</a></code></pre></div>
 <p>A função <code>layer</code> (do inglês, <em>layer</em>, para camada) serve para descarregar os dados contidos na tabela <code>camada</code> dos conjunto de dados. Por exemplo, para descarregar os dados da tabela <code>camada</code> dos conjuntos de dados <code>ctb0003</code> e <code>ctb0036</code>, retornando apenas as variáveis <code>argila</code>, <code>carbono</code> e <code>densidade</code>, usamos o seguinte código:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cam &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">layer</span>(<span class="dt">dataset =</span> <span class="kw">c</span>(<span class="st">&quot;ctb0003&quot;</span>, <span class="st">&quot;ctb0036&quot;</span>), <span class="dt">variable =</span> <span class="kw">c</span>(<span class="st">&quot;argila&quot;</span>, <span class="st">&quot;carbono&quot;</span>, <span class="st">&quot;densidade&quot;</span>))</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">cam &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">layer</span>(<span class="dt">dataset =</span> <span class="kw">c</span>(<span class="st">&quot;ctb0003&quot;</span>, <span class="st">&quot;ctb0036&quot;</span>), <span class="dt">variable =</span> <span class="kw">c</span>(<span class="st">&quot;argila&quot;</span>, <span class="st">&quot;carbono&quot;</span>, <span class="st">&quot;densidade&quot;</span>))</a></code></pre></div>
 <p>A última função de acesso é <code>febr</code>. Ela serve para descarregar todos os dados e metadados de um único conjunto de dados. Essa função aceita os mesmos argumentos das funções <code>observation</code> e <code>layer</code> – que são idênticos devido à similaridade da estrutura das tabelas <code>observacao</code> e <code>camada</code>. Assim, como naquelas funções, é possível solicitar que os dados passem por uma rotina de limpeza e padronização:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tudo &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">febr</span>(
-  <span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;all&quot;</span>, <span class="dt">merge =</span> <span class="ot">TRUE</span>, 
-  <span class="dt">missing =</span> <span class="kw">list</span>(<span class="dt">coord =</span> <span class="st">&quot;drop&quot;</span>, <span class="dt">time =</span> <span class="st">&quot;drop&quot;</span>, <span class="dt">depth =</span> <span class="st">&quot;drop&quot;</span>),
-  <span class="dt">standardization =</span> <span class="kw">list</span>(
-    <span class="dt">crs =</span> <span class="st">&quot;EPSG:4674&quot;</span>, <span class="dt">time.format =</span> <span class="st">&quot;%Y-%m-%d&quot;</span>,
-    <span class="dt">repetition =</span> <span class="st">&quot;combine&quot;</span>, <span class="dt">combine.fun =</span> <span class="st">&quot;mean&quot;</span>,
-    <span class="dt">transition =</span> <span class="st">&quot;smooth&quot;</span>, <span class="dt">smoothing.fun =</span> <span class="st">&quot;mean&quot;</span>,
-    <span class="dt">plus.sign =</span> <span class="st">&quot;add&quot;</span>, <span class="dt">plus.depth =</span> <span class="fl">2.5</span>,
-    <span class="dt">lessthan.sign =</span> <span class="st">&quot;subtract&quot;</span>, <span class="dt">lessthan.frac =</span> <span class="fl">0.1</span>,
-    <span class="dt">units =</span> <span class="ot">TRUE</span>, <span class="dt">round =</span> <span class="ot">TRUE</span>))</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">tudo &lt;-<span class="st"> </span>febr<span class="op">::</span><span class="kw">febr</span>(</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">  <span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;all&quot;</span>, <span class="dt">merge =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">  <span class="dt">missing =</span> <span class="kw">list</span>(<span class="dt">coord =</span> <span class="st">&quot;drop&quot;</span>, <span class="dt">time =</span> <span class="st">&quot;drop&quot;</span>, <span class="dt">depth =</span> <span class="st">&quot;drop&quot;</span>),</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">  <span class="dt">standardization =</span> <span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">    <span class="dt">crs =</span> <span class="st">&quot;EPSG:4674&quot;</span>, <span class="dt">time.format =</span> <span class="st">&quot;%Y-%m-%d&quot;</span>,</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">    <span class="dt">repetition =</span> <span class="st">&quot;combine&quot;</span>, <span class="dt">combine.fun =</span> <span class="st">&quot;mean&quot;</span>,</a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">    <span class="dt">transition =</span> <span class="st">&quot;smooth&quot;</span>, <span class="dt">smoothing.fun =</span> <span class="st">&quot;mean&quot;</span>,</a>
+<a class="sourceLine" id="cb10-8" data-line-number="8">    <span class="dt">plus.sign =</span> <span class="st">&quot;add&quot;</span>, <span class="dt">plus.depth =</span> <span class="fl">2.5</span>,</a>
+<a class="sourceLine" id="cb10-9" data-line-number="9">    <span class="dt">lessthan.sign =</span> <span class="st">&quot;subtract&quot;</span>, <span class="dt">lessthan.frac =</span> <span class="fl">0.1</span>,</a>
+<a class="sourceLine" id="cb10-10" data-line-number="10">    <span class="dt">units =</span> <span class="ot">TRUE</span>, <span class="dt">round =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
 </div>
 <div id="funcoes-auxiliares" class="section level1">
 <h1>Funções auxiliares</h1>
 <p>As funções auxiliares servem para realizar tarefas complementares às funções estruturais e de acesso, assim apoiando o processamento e uso dos dados descarregados do <strong><em>febr</em></strong>, por exemplo, a criação de objetos de outras classes e a exportação dos dados.</p>
 <p>A função <code>febr2spdf</code> serve para criar um objeto de classe <code>SpatialPointsDataFrame</code> <span class="citation">(Pebesma e Bivand <a href="#ref-sp">2005</a>)</span> a partir da tabela <code>observacao</code> descarregada usando a função <code>observation</code>. O código a seguir demonstra como fazer isso – note que as funções do pacote <code>febr</code> são compatíveis com o uso do operador <code>%&gt;%</code> do pacote <code>magrittr</code> <span class="citation">(Bache e Wickham <a href="#ref-magrittr">2014</a>)</span>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
-obs &lt;-<span class="st"> </span>
-<span class="st">  </span>febr<span class="op">::</span><span class="kw">observation</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;taxon&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>febr<span class="op">::</span><span class="kw">febr2spdf</span>()</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">obs &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span>febr<span class="op">::</span><span class="kw">observation</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;taxon&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span>febr<span class="op">::</span><span class="kw">febr2spdf</span>()</a></code></pre></div>
 <p>Já a função <code>febr2xlsx</code> – construída sobre funções do pacote <code>xlsx</code> <span class="citation">(Dragulescu <a href="#ref-xlsx">2014</a>)</span> – serve para escrever os dados de um conjunto de dados para um arquivo XLSX no disco rígido. No caso específico da função <code>febr</code>, que retorna um objeto de classe <code>list</code> composto de itens de classe <code>data.frame</code>, a função <code>febr2xlsx</code> escreve cada um dos <code>data.frame</code>s em uma planilha individual do mesmo arquivo XLSX. Por exemplo,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tudo &lt;-<span class="st"> </span>
-<span class="st">  </span>febr<span class="op">::</span><span class="kw">febr</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;all&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>febr<span class="op">::</span><span class="kw">febr2xlsx</span>(<span class="dt">file =</span> <span class="st">&quot;ctb0003.xlsx&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">tudo &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span>febr<span class="op">::</span><span class="kw">febr</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0003&quot;</span>, <span class="dt">variable =</span> <span class="st">&quot;all&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span>febr<span class="op">::</span><span class="kw">febr2xlsx</span>(<span class="dt">file =</span> <span class="st">&quot;ctb0003.xlsx&quot;</span>)</a></code></pre></div>
 <p>A terceira função auxiliar do pacote <code>febr</code> é <code>goto</code>. A função <code>goto</code> serve de interface para navegação nas diversas páginas na Internet do <strong><em>febr</em></strong>: página principal, visualização geográfica, catálogo de conjuntos de dados, página de busca, manual do mantenedor, pacote para R, GitHub, fórum de discussão, e tabelas com padrões de unidades de medida e de codificação e nomenclatura. Além disso, a função <code>goto</code> serve para visitar as tabelas dos conjuntos de dados. Por exemplo, para visitar a tabela <code>camada</code> do conjunto de dados <code>ctb0036</code>, usamos o seguinte código:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">febr<span class="op">::</span><span class="kw">goto</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0036&quot;</span>, <span class="dt">table =</span> <span class="st">&quot;camada&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">febr<span class="op">::</span><span class="kw">goto</span>(<span class="dt">dataset =</span> <span class="st">&quot;ctb0036&quot;</span>, <span class="dt">table =</span> <span class="st">&quot;camada&quot;</span>)</a></code></pre></div>
 <p>Novas funções auxiliares podem ser criadas à medida que as usuárias do pacote <code>febr</code> apontarem a sua necessidade. Alternativamente, as usuárias são encorajadas a submeter funções auxiliares para inclusão no pacote <code>febr</code> seguindo o modelo de desenvolvimento colaborativo <em>fork &amp; pull</em>.</p>
 </div>
 <div id="referencias" class="section level1 unnumbered">
 <h1>Referências</h1>
 <div id="refs" class="references">
 <div id="ref-magrittr">
-<p>Bache, S. M., Wickham, H. <em>magrittr: A Forward-Pipe Operator for R</em>. [s.l: s.n.]. <a href="https://CRAN.R-project.org/package=magrittr" class="uri">https://CRAN.R-project.org/package=magrittr</a>. R package version 1.5</p>
+<p>Bache, S. M., Wickham, H. <em>magrittr: A Forward-Pipe Operator for R</em>. [s.l: s.n.]. <a href="https://CRAN.R-project.org/package=magrittr">https://CRAN.R-project.org/package=magrittr</a>. R package version 1.5</p>
 </div>
 <div id="ref-googlesheets">
-<p>Bryan, J., Zhao, J. <em>googlesheets: Manage Google Spreadsheets from R</em>. [s.l: s.n.]. <a href="https://github.com/jennybc/googlesheets" class="uri">https://github.com/jennybc/googlesheets</a>. R package version 0.2.2.9000</p>
+<p>Bryan, J., Zhao, J. <em>googlesheets: Manage Google Spreadsheets from R</em>. [s.l: s.n.]. <a href="https://github.com/jennybc/googlesheets">https://github.com/jennybc/googlesheets</a>. R package version 0.2.2.9000</p>
 </div>
 <div id="ref-xlsx">
-<p>Dragulescu, A. A. <em>xlsx: Read, write, format Excel 2007 and Excel 97/2000/XP/2003 files</em>. [s.l: s.n.]. <a href="https://CRAN.R-project.org/package=xlsx" class="uri">https://CRAN.R-project.org/package=xlsx</a>. R package version 0.5.7</p>
+<p>Dragulescu, A. A. <em>xlsx: Read, write, format Excel 2007 and Excel 97/2000/XP/2003 files</em>. [s.l: s.n.]. <a href="https://CRAN.R-project.org/package=xlsx">https://CRAN.R-project.org/package=xlsx</a>. R package version 0.5.7</p>
 </div>
 <div id="ref-sp">
-<p>Pebesma, E. J., Bivand, R. S. Classes and methods for spatial data in R. <em>R News</em>, 5(2):9–13, 2005. <a href="https://CRAN.R-project.org/doc/Rnews/" class="uri">https://CRAN.R-project.org/doc/Rnews/</a>. </p>
+<p>Pebesma, E. J., Bivand, R. S. Classes and methods for spatial data in R. <em>R News</em>, 5(2):9–13, 2005. <a href="https://CRAN.R-project.org/doc/Rnews/">https://CRAN.R-project.org/doc/Rnews/</a>. </p>
 </div>
 <div id="ref-r">
-<p>R Core Team. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing, 2017. <a href="https://www.R-project.org/" class="uri">https://www.R-project.org/</a>. </p>
+<p>R Core Team. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing, 2017. <a href="https://www.R-project.org/">https://www.R-project.org/</a>. </p>
 </div>
 <div id="ref-devtools">
-<p>Wickham, H., Chang, W. <em>devtools: Tools to Make Developing R Packages Easier</em>. [s.l: s.n.]. <a href="https://CRAN.R-project.org/package=devtools" class="uri">https://CRAN.R-project.org/package=devtools</a>. R package version 1.13.4</p>
+<p>Wickham, H., Chang, W. <em>devtools: Tools to Make Developing R Packages Easier</em>. [s.l: s.n.]. <a href="https://CRAN.R-project.org/package=devtools">https://CRAN.R-project.org/package=devtools</a>. R package version 1.13.4</p>
 </div>
 </div>
 </div>
