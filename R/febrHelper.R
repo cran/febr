@@ -244,31 +244,34 @@
 
 # Descarregar cabeçalho das tabelas 'camada' e observacao' ----
 .getHeader <- 
-  function (x) {
+  function (x, ws) {
     res <- googlesheets::gs_key(x = x, verbose = .opt()$gs$verbose)
     # nmax <- 1
     nmax <- 2
     res <- suppressMessages(
       googlesheets::gs_read_csv(
-        ss = res, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, n_max = nmax))
+        ss = res, ws = ws, 
+        locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, n_max = nmax)
+      )
     res <- as.data.frame(res)
     # res[1, ] <- gsub("#unidade", "-", res[1, ])
     return (res)
   }
 
-# Descarregar tabela 'camada' e 'observacao' ----
+# Descarregar tabela 'camada' e 'observacao' ------------------------------------------------------------------
 .getTable <-
-  function (x) {
-    res <- googlesheets::gs_key(x = x, verbose = .opt()$gs$verbose)
+  function (x, ws) {
+    ss <- googlesheets::gs_key(x = x, verbose = .opt()$gs$verbose)
     res <- suppressMessages(
       googlesheets::gs_read_csv(
-        res, na = .opt()$gs$na, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, 
-        comment = .opt()$gs$comment))
+        ss = ss, ws = ws, # identifica Sheet com seu nome
+        na = .opt()$gs$na, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, comment = .opt()$gs$comment)
+      )
     res <- as.data.frame(res)
     return (res)
   }
 
-# Descarregar tabela 'febr-padrao' ----
+# Descarregar tabela 'febr-padroes' ---------------------------------------------------------------------------
 .getStds <-
   function (x) {
     
@@ -284,14 +287,15 @@
     na <- na[-which(na == "-")]
     res <- suppressMessages(
       googlesheets::gs_read_csv(
-        res, na = na, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, comment = .opt()$gs$comment))
+        ss = res, ws = 'padroes', # Identifica Sheet por seu nome
+        na = na, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, comment = .opt()$gs$comment))
     res <- as.data.frame(res)
     res$campo_precisao <- gsub(pattern = "-", NA_real_, res$campo_precisao)
     res$campo_precisao <- as.numeric(res$campo_precisao)
     return (res)
   }
 
-# Descarregar tabela 'febr-unidade' ----
+# Descarregar tabela 'febr-unidades' --------------------------------------------------------------------------
 .getUnits <-
   function (x) {
     
@@ -306,7 +310,8 @@
     na <- na[-which(na == "-")]
     res <- suppressMessages(
       googlesheets::gs_read_csv(
-        res, na = na, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, comment = .opt()$gs$comment))
+        ss = res, ws = 'unidades', # identifica Sheet por seu nome
+        na = na, locale = .opt()$gs$locale, verbose = .opt()$gs$verbose, comment = .opt()$gs$comment))
     res <- as.data.frame(res)
     return (res)
   }

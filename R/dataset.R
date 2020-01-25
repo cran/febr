@@ -1,8 +1,8 @@
 #' Get *dataset* table
 #'
 #' Download data from the *dataset* ("dataset") table of one or more datasets contained in the Free Brazilian
-#' Repository for Open Soil Data -- ___febr___, \url{http://www.ufsm.br/febr}. This includes dataset name and
-#' description, author and institution names, dataset license, and much more.
+#' Repository for Open Soil Data -- ___febr___, \url{http://www.ufsm.br/febr}. This includes dataset title and
+#' description, author and institution identification, dataset license, and much more.
 #'
 #' @template metadata_template
 #'
@@ -24,17 +24,20 @@ dataset <-
     if (missing(dataset)) {
       stop ("argument 'dataset' is missing")
     } else if (!is.character(dataset)) {
-      stop (glue::glue("object of class '{class(dataset)}' passed to argument 'dataset'"))
+      #stop (glue::glue("object of class '{class(dataset)}' passed to argument 'dataset'"))
+      stop (paste("object of class", class(dataset), "passed to argument 'dataset'"))
     }
     
     ## progress
     if (!is.logical(progress)) {
-      stop (glue::glue("object of class '{class(progress)}' passed to argument 'progress'"))
+      #stop (glue::glue("object of class '{class(progress)}' passed to argument 'progress'"))
+      stop (paste("object of class", class(progress), "passed to argument 'progress'"))
     }
     
     ## verbose
     if (!is.logical(verbose)) {
-      stop (glue::glue("object of class '{class(verbose)}' passed to argument 'verbose'"))
+      #stop (glue::glue("object of class '{class(verbose)}' passed to argument 'verbose'"))
+      stop (paste("object of class", class(verbose), "passed to argument 'verbose'"))
     }
 
     # Descarregar chaves de identificação das planilhas do repositório
@@ -55,12 +58,15 @@ dataset <-
       dts <- sheets_keys$ctb[i]
       if (verbose) {
         par <- ifelse(progress, "\n", "")
-        message(paste(par, "Downloading dataset ", dts, "...", sep = ""))
+        message(paste(par, "Downloading dataset", dts, "..."))
       }
       
       tmp <- googlesheets::gs_key(sheets_keys$dataset[i], verbose = FALSE)
       tmp <- suppressMessages(
-        googlesheets::gs_read_csv(tmp, na = opts$gs$na, locale = opts$gs$locale, verbose = opts$gs$verbose)
+        googlesheets::gs_read_csv(
+          ss = tmp, ws = 'dataset', # identifica Sheet por seu nome
+          na = opts$gs$na, locale = opts$gs$locale, verbose = opts$gs$verbose
+        )
       )
 
       # Dados processados

@@ -4,12 +4,18 @@
 \alias{layer}
 \title{Get \emph{layer} table}
 \usage{
-layer(dataset, variable, stack = FALSE, missing = list(depth = "keep",
-  data = "keep"), standardization = list(plus.sign = "keep", plus.depth =
-  2.5, lessthan.sign = "keep", lessthan.frac = 0.5, repetition = "keep",
-  combine.fun = "mean", transition = "keep", smoothing.fun = "mean", units
-  = FALSE, round = FALSE), harmonization = list(harmonize = FALSE, level
-  = 2), progress = TRUE, verbose = TRUE)
+layer(
+  dataset,
+  variable,
+  stack = FALSE,
+  missing = list(depth = "keep", data = "keep"),
+  standardization = list(plus.sign = "keep", plus.depth = 2.5, lessthan.sign = "keep",
+    lessthan.frac = 0.5, repetition = "keep", combine.fun = "mean", transition = "keep",
+    smoothing.fun = "mean", units = FALSE, round = FALSE),
+  harmonization = list(harmonize = FALSE, level = 2),
+  progress = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{dataset}{Character vector indicating one or more datasets. Identification codes should be as recorded
@@ -41,7 +47,7 @@ to indicate that the value of a variable is below the lower limit of detection. 
 (default), \code{"subtract"}, and \code{"remove"}.
 \item \code{lessthan.frac} Numeric value between 0 and 1 (a fraction) by which the lower limit of detection
 should be subtracted when \code{lessthan.sign = "subtract"}. Defaults to \code{lessthan.frac = 0.5}, i.e.
-subtract 50\% from the lower limit of detection.
+subtract 50\\% from the lower limit of detection.
 
 \item \code{repetition} Character string indicating what should be done with repetitions, i.e. repeated
 measurements of layers in an observation. Options are \code{"keep"} (default) and \code{"combine"}. In the
@@ -57,7 +63,7 @@ transition between subsequent layers in an observation. Options are \code{"keep"
 irregular transitions between subsequent layers in an observation when \code{transition = "smooth"}.
 Options are \code{"mean"} (default), \code{"min"}, \code{"max"}, and \code{"median"}.
 
-\item \code{units} Logical value indicating if the measurement units of the continuous variable(s) should
+\item \code{units} Logical value indicating if the measurement unit(s) of the continuous variable(s) should
 be converted to the standard measurement unit(s). Defaults to \code{units = FALSE}, i.e. no conversion is
 performed. See \code{\link[febr]{standard}} for more information.
 \item \code{round} Logical value indicating if the values of the continuous variable(s) should be rounded
@@ -68,7 +74,7 @@ no rounding is performed. See \code{\link[febr]{standard}} for more information.
 \item{harmonization}{(optional) List with named sub-arguments indicating if and how to perform data
 harmonization.
 \itemize{
-\item \code{harmonize} Logical value indicating if data should be harmonized? Defaults to \code{harmonize = FALSE},
+\item \code{harmonize} Logical value indicating if data should be harmonized. Defaults to \code{harmonize = FALSE},
 i.e. no harmonization is performed.
 \item \code{level} Integer value indicating the number of levels of the identification code of the variable(s)
 that should be considered for harmonization. Defaults to \code{level = 2}. See \sQuote{Details} for more
@@ -96,7 +102,7 @@ dataset before downloading it.
 Standard identification variables and their content are as follows:
 \itemize{
 \item \code{dataset_id}. Identification code of the dataset in \emph{\strong{febr}} to which an observation belongs.
-\item \code{observacao_id}. Identification code of an observation in \emph{\strong{febr}}.
+\item \code{observacao_id}. Identification code of an observation in a dataset.
 \item \code{camada_id}. Sequential layer number, from top to bottom.
 \item \code{camada_nome}. Layer designation according to some standard description guide.
 \item \code{amostra_id}. Laboratory number of a sample.
@@ -104,7 +110,7 @@ Standard identification variables and their content are as follows:
 \item \code{profund_inf}. Lower boundary of a layer (cm).
 }
 Further details about the content of the standard identification variables can be found in
-\url{http://www.ufsm.br/febr/book/} (in Portuguese).
+\url{https://docs.google.com/document/d/1Bqo8HtitZv11TXzTviVq2bI5dE6_t_fJt0HE-l3IMqM} (in Portuguese).
 }
 
 \subsection{Harmonization}{
@@ -114,9 +120,8 @@ that they are (approximately) equivalent to the values that would have been obta
 method to the standard dry combustion method is data harmonization.
 
 A heuristic data harmonization procedure is implemented in the \strong{febr} package. It consists of grouping
-variables
-based on a chosen number of levels of their identification code. For example, consider a variable with an
-identification code composed of four levels, \code{aaa_bbb_ccc_ddd}, where \code{aaa} is the first level and
+variables based on a chosen number of levels of their identification code. For example, consider a variable
+with an identification code composed of four levels, \code{aaa_bbb_ccc_ddd}, where \code{aaa} is the first level and
 \code{ddd} is the fourth level. Now consider a related variable, \code{aaa_bbb_eee_fff}. If the harmonization
 is to consider all four coding levels (\code{level = 4}), then these two variables will remain coded as
 separate variables. But if \code{level = 2}, then both variables will be re-coded as \code{aaa_bbb}, thus becoming the

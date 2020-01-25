@@ -1,3 +1,19 @@
+# Version 1.0.3 (2020-01-25)
+
+* New version (patch) including internal changes in download functions and documentation improvements.
+
+# Version 1.0.2.9001 (2020-01-24)
+
+* Preparing for future modifications in data storage in ___febr___. Now the sheet name (`dataset`, 
+  `observacao`, `camada` or `metadado`) is explicitly specified withing download functions. The user should not
+  have to worry about this change.
+
+# Version 1.0.2.9000 (2019-09-05)
+
+* Bug fix: setting argument `missing = list(coord = 'drop')` in function `observation()` now correctly drops 
+  observations missing spatial coordinates. Thanks to Edberto Moura Lima, from the Federal University of Santa
+  Maria, who identified the bug. Equivalent modifications were implemented in function `layer()`.
+
 # Version 1.0.2 (2019-05-06)
 
 * New version (patch) -- including several bug fixes.

@@ -13,11 +13,11 @@
 #' @export
 #' @examples
 # \donttest{
-#' library(magrittr)
-#' observation(dataset = "ctb0003", variable = "taxon",
-#'             progress = FALSE, verbose = FALSE) %>%
-#' febr2spdf() %>%
-#' sp::spplot(zcol = "taxon_sibcs_2009", auto.key = list(columns = 3), scales = list(draw = TRUE))
+#' res <- observation(dataset = "ctb0003", variable = "taxon", 
+#'                    progress = FALSE, verbose = FALSE)
+#' res <- febr2spdf(obj = res)
+#' sp::spplot(obj = res, zcol = "taxon_sibcs_2009", 
+#'            auto.key = list(columns = 3), scales = list(draw = TRUE))
 # }
 ###############################################################################################################
 febr2spdf <-
@@ -28,7 +28,8 @@ febr2spdf <-
     n_crs <- length(crs)
     if (n_crs == 1) {
       sp::coordinates(obj) <- ~ coord_x + coord_y
-      sp::proj4string(obj = obj) <- sp::CRS(glue::glue("+init={tolower(crs)}"))
+      #sp::proj4string(obj = obj) <- sp::CRS(glue::glue("+init={tolower(crs)}"))
+      sp::proj4string(obj = obj) <- sp::CRS(paste("+init=", tolower(crs), sep = ""))
       obj@data <- dplyr::select(obj@data, -coord_sistema)
     } else {
       stop ("spatial coordinates have not been standardized")
