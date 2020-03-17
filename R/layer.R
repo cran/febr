@@ -10,7 +10,8 @@
 #' @template metadata_template
 #'
 #' @param missing (optional) List with named sub-arguments indicating what should be done with a layer missing
-#' data on sampling depth, `depth`, or data on variable(s), `data`. Options are `"keep"` (default) and `"drop"`.
+#' data on sampling depth, `depth`, or data on variable(s), `data`. Options are `"keep"` (default) and 
+#' `"drop"`.
 #' 
 #' @param standardization (optional) List with named sub-arguments indicating how to perform data 
 #' standardization.
@@ -104,11 +105,7 @@
 #' @seealso \code{\link[febr]{observation}}, \code{\link[febr]{standard}}, \code{\link[febr]{unit}}
 #' @export
 #' @examples
-# \donttest{
-# res <- layer(dataset = paste("ctb000", 4:9, sep = ""))
 #' res <- layer(dataset = "ctb0013")
-#' str(res)
-# }
 ###############################################################################################################
 layer <-
   function (dataset, variable,
@@ -283,10 +280,9 @@ layer <-
     ## Descarregar tabela com unidades de medida e número de casas decimais quando padronização é solicitada
     ## ou quando empilhamento é solicitado
     if (standardization$units || stack) {
-      # febr_stds <- .getTable(x = "1Dalqi5JbW4fg9oNkXw5TykZTA39pR5GezapVeV0lJZI")
-      # febr_unit <- .getTable(x = "1tU4Me3NJqk4NH2z0jvMryGObSSQLCvGqdLEL5bvOflo")
       febr_stds <- .getStds()
-      febr_unit <- .getUnits()
+      # febr_unit <- .getUnits()
+      febr_unit <- .readGoogleSheetCSV(sheet.name = 'unidades')
     }
     
     ## stack + stadardization
@@ -318,16 +314,21 @@ layer <-
       dts <- sheets_keys$ctb[i]
       if (verbose) {
         par <- ifelse(progress, "\n", "")
-        message(paste(par, "Downloading dataset ", dts, "...", sep = ""))
+        message(paste(par, "Downloading ", dts, "-camada...", sep = ""))
       }
       
       # DESCARREGAMENTO
+      unit <- .readGoogleSheetCSV(sheet.id = sheets_keys[i, "camada"], sheet.name = 'camada')
+      tmp <- unit[['table']]
+      unit <- unit[['header']]
+      n_rows <- nrow(tmp)
+      
       ## Cabeçalho com unidades de medida
-      unit <- .getHeader(x = sheets_keys$camada[i], ws = 'camada') # identifica Sheet com seu nome
+      # unit <- .getHeader(x = sheets_keys$camada[i], ws = 'camada') # identifica Sheet com seu nome
       
       ## Dados
-      tmp <- .getTable(x = sheets_keys$camada[i], ws = 'camada')
-      n_rows <- nrow(tmp)
+      # tmp <- .getTable(x = sheets_keys$camada[i], ws = 'camada')
+      # n_rows <- nrow(tmp)
       
       # PROCESSAMENTO I
       ## A decisão pelo processamento dos dados começa pela verificação de dados faltantes nas profundidades
@@ -381,11 +382,13 @@ layer <-
           }
           
           # TIPO DE DADOS
-          ## "observacao_id", "camada_id", "camada_nome", "amostra_id", "profund_sup" e "profund_inf"
-          ## precisam estar no formato de caracter para evitar erros durante o empilhamento das tabelas
-          ## devido ao tipo de dado.
+          ## "observacao_id", "camada_id", "camada_nome", "amostra_id", "profund_sup" e "profund_inf" devem
+          ## estar no formato de caracter para evitar erros durante o empilhamento das tabelas devido ao tipo 
+          ## de dado.
           ## Nota: esse processamento deve ser feito via Google Sheets.
-          tmp[std_cols] <- sapply(tmp[std_cols], as.character)
+          if (stack) {
+            tmp[std_cols] <- sapply(tmp[std_cols], as.character)
+          }
           
           # PADRONIZAÇÃO I
           ## Profundidade e transição entre as camadas

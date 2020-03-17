@@ -1,3 +1,48 @@
+# Version 1.1.0 (2020-03-17)
+
+* Improvements:
+  + Packages __googlesheets__, __googlesheets4__ and __readr__ are not dependencies anymore;
+  + A new function `febr2sf` is available as a replacement for `febr2sp` -- __sp__ is not dependencies anymore;
+  + `febr2xlsx` is now deprecated -- __xlsx__ is not dependencies anymore;
+* Bug fix:
+  + `layer`: standard variables are only set to type character when `stack = TRUE`.
+
+# Version 1.0.3.9004 (2020-03-11)
+
+* Getting rid of __googlesheets4__.
+
+# Version 1.0.3.9003 (2020-03-10)
+
+* Using `Sys.sleep(time = 10)` to pass checks in functions examples. This is necessary because the new Google
+  Sheets API has a limit of 500 requests per 100 seconds per project, and 100 requests per 100 seconds per
+  user (https://developers.google.com/sheets/api/limits). This issue has also been found elsewhere, e.g.
+  https://stackoverflow.com/questions/53765222/python-google-sheets-api-limit-429-error-with-loop. We soon will
+  remove the dependency upon __googlesheets4__ and thus solve this issue.
+* Preparing for removal of __googlesheets4__ from the list of imports.
+
+# Version 1.0.3.9002 (2020-03-09)
+
+* Improvements:
+  + New function: `febr2sf` as a replacement for `febr2sp`;
+  + Replaces __googlesheets__ with `.readGoogleSheets`;
+  + `febr2xlsx` is now deprecated and __febr__ does not depend upon __xlsx__ anymore;
+  + Improves documentation;
+* Bug fixes:
+  + `layer`: standard variables are only set to type character when `stack = TRUE`;
+
+# Version 1.0.3.9001 (2020-03-08)
+
+* Improvements:
+  + Replaces __sp__ with __sf__;
+  + Exports new data reading function: `.readGoogleSheets`;
+  + Improves documentation;
+* Bug fixes:
+  + `metadata`: get correct file id.
+
+# Version 1.0.3.9000 (2020-02-09)
+
+* Replacing __googlesheets__ with __googlesheets4__.
+
 # Version 1.0.3 (2020-01-25)
 
 * New version (patch) including internal changes in download functions and documentation improvements.

@@ -2,28 +2,30 @@
 % Please edit documentation in R/febr2spdf.R
 \name{febr2spdf}
 \alias{febr2spdf}
-\title{Create an object of class \code{SpatialPointsDataFrame}}
+\alias{febr2sf}
+\title{Create an sf object}
 \usage{
 febr2spdf(obj)
+
+febr2sf(obj)
 }
 \arguments{
 \item{obj}{Object of class \code{data.frame} downloaded from \emph{\strong{febr}} using function
 \code{\link[febr]{observation}}.}
 }
 \value{
-An object of class \code{SpatialPointsDataFrame}
+An sf object
 }
 \description{
-Set spatial coordinates and projection attributes to create an object of class \code{SpatialPointsDataFrame} from
-the \emph{observation} ("observacao") table of one or more standardized datasets contained in the Free Brazilian
-Repository for Open Soil Data -- \emph{\strong{febr}}, \url{http://www.ufsm.br/febr}.
+Set spatial coordinates and projection attributes to create an sf object from the \emph{observation}
+("observacao") table of one or more standardized datasets contained in the Free Brazilian Repository for
+Open Soil Data -- \emph{\strong{febr}}, \url{http://www.ufsm.br/febr}.
 }
 \examples{
-res <- observation(dataset = "ctb0003", variable = "taxon", 
+res <- observation(dataset = "ctb0003", variable = "taxon",
                    progress = FALSE, verbose = FALSE)
-res <- febr2spdf(obj = res)
-sp::spplot(obj = res, zcol = "taxon_sibcs_2009", 
-           auto.key = list(columns = 3), scales = list(draw = TRUE))
+res <- febr2sf(obj = res)
+plot(res["taxon_sibcs_2009"], axes = TRUE, graticule = TRUE)
 }
 \author{
 Alessandro Samuel-Rosa \email{alessandrosamuelrosa@gmail.com}

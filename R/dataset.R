@@ -11,14 +11,15 @@
 #' @author Alessandro Samuel-Rosa \email{alessandrosamuelrosa@@gmail.com}
 #' @export
 #' @examples
-# \donttest{
+#' \donttest{
 #' res <- dataset(dataset = "ctb0003")
-#' head(res)
-# }
+#' }
 ###############################################################################################################
 dataset <-
   function (dataset, progress = TRUE, verbose = TRUE) {
 
+    # googlesheets4::sheets_deauth()
+    
     # ARGUMENTOS
     ## dataset
     if (missing(dataset)) {
@@ -58,17 +59,24 @@ dataset <-
       dts <- sheets_keys$ctb[i]
       if (verbose) {
         par <- ifelse(progress, "\n", "")
-        message(paste(par, "Downloading dataset", dts, "..."))
+        message(paste(par, "Downloading ", dts, "-dataset...", sep = ""))
       }
       
-      tmp <- googlesheets::gs_key(sheets_keys$dataset[i], verbose = FALSE)
-      tmp <- suppressMessages(
-        googlesheets::gs_read_csv(
-          ss = tmp, ws = 'dataset', # identifica Sheet por seu nome
-          na = opts$gs$na, locale = opts$gs$locale, verbose = opts$gs$verbose
-        )
-      )
-
+      # motor de descarregamento e leitura ---
+      # googlesheets ---
+      # tmp <- googlesheets::gs_key(sheets_keys$dataset[i], verbose = FALSE)
+      # tmp <- suppressMessages(
+      #   googlesheets::gs_read_csv(
+      #     ss = tmp, ws = 'dataset', # identifica Sheet por seu nome
+      #     na = opts$gs$na, locale = opts$gs$locale, verbose = opts$gs$verbose
+      #   )
+      # )
+      # googlesheets4 ---
+      # tmp <- suppressMessages(
+      #   googlesheets4::read_sheet(ss = sheets_keys$dataset[i], sheet = 'dataset', na = opts$gs$na))
+      # utils ---
+      tmp <- .readGoogleSheetCSV(sheet.id = sheets_keys[i, 'dataset'], sheet.name = 'dataset')
+      
       # Dados processados
       obs[[i]] <- as.data.frame(tmp)
       if (progress) {

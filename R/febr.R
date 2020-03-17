@@ -22,8 +22,7 @@
 #' @export
 #' @examples
 #' \donttest{ 
-#' res <- febr(dataset = "ctb0003", merge = TRUE, variable = "all")
-#' str(res)
+#' # res <- febr(dataset = "ctb0013")
 #' }
 ###############################################################################################################
 febr <- 
@@ -34,7 +33,6 @@ febr <-
     if (missing(dataset)) {
       stop ("argument 'dataset' is missing")
     } else if (!is.character(dataset)) {
-      #stop (glue::glue("object of class '{class(dataset)}' passed to argument 'dataset'"))
       stop (paste("object of class", class(dataset), "passed to argument 'dataset'"))
     } else if (length(dataset) > 1 || dataset == "all") {
       stop ("cannot donwload data from more than on dataset")
@@ -42,36 +40,31 @@ febr <-
     
     ## merge
     if (!is.logical(merge)) {
-      #stop (glue::glue("object of class '{class(merge)}' passed to argument 'merge'"))
       stop (paste("object of class", class(merge), "passed to argument 'merge'"))
     }
     
     # DESCARREGAMENTO
     ## Descarregar tabela 'dataset'
     if (verbose) {
-      #message(glue::glue("Downloading table {dataset}-dataset..."))
-      message(paste("Downloading table ", dataset, "-dataset...", sep = ""))
+      message(paste("Downloading ", dataset, "-dataset...", sep = ""))
     }
     dts <- dataset(dataset = dataset, progress = progress, verbose = FALSE)
     
     ## Descarregar tabela 'observacao'
     if (verbose) {
-      #message(glue::glue("Downloading table {dataset}-observacao..."))
-      message(paste("Downloading table ", dataset, "-observacao...", sep = ""))
+      message(paste("Downloading ", dataset, "-observacao...", sep = ""))
     }
     obs <- observation(dataset = dataset, progress = progress, verbose = FALSE, ...)
     
     ## Descarregar tabela 'camada'
     if (verbose) {
-      #message(glue::glue("Downloading table {dataset}-camada..."))
-      message(paste("Downloading table ", dataset, "-camada...", sep = ""))
+      message(paste("Downloading ", dataset, "-camada...", sep = ""))
     }
     lyr <- layer(dataset = dataset, progress = progress, verbose = FALSE, ...)
     
     ## Descarregar tabela 'metadado'
     if (verbose) {
-      #message(glue::glue("Downloading table {dataset}-metadado..."))
-      message(paste("Downloading table ", dataset, "-metadado...", sep = ""))
+      message(paste("Downloading ", dataset, "-metadado...", sep = ""))
     }
     mtd <- try(metadata(dataset = dataset, progress = progress, verbose = FALSE))
     

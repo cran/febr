@@ -10,35 +10,39 @@
 #' @param row.names (optional) Logical value indicating whether the row names of `x` are to be written along 
 #' with `x` to the file.
 #' 
-#' @param ... (optional) Further arguments passed to \code{\link[xlsx]{write.xlsx}}.
+#' @param ... (optional) Further arguments passed to write function.
+#' 
+#' @note THIS FUNCTION IS DEPRECATED. PLEASE USE \code{\link[openxlsx]{write.xlsx}} INSTEAD.
 #' 
 #' @author Alessandro Samuel-Rosa \email{alessandrosamuelrosa@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
-#' dts <-
-#'   febr::febr(dataset = "ctb0013", 
-#'              variable = "all",
-#'              merge = TRUE,
-#'              progress = FALSE, verbose = FALSE)
-#' febr2xlsx(x = dts, file = tempfile(fileext = ".xlsx"))
+#' # dts <-
+#' #   febr(dataset = "ctb0013",
+#' #        variable = "all",
+#' #        merge = TRUE,
+#' #        progress = FALSE, verbose = FALSE)
+#' # febr2xlsx(x = dts, file = tempfile(fileext = ".xlsx"))
 #' }
 ###############################################################################################################
 febr2xlsx <-
   function (x, file, row.names = FALSE, ...) {
     
-    if (inherits(x, what = "list")) {
-      
-      # Multiplas tabelas
-      for (i in 1:length(x)) {
-        xlsx::write.xlsx(
-          x[[i]], file = file, 
-          # sheetName = glue::glue("sheet{i}"), 
-          sheetName = paste("sheet", i, sep = ""), 
-          append = TRUE, row.names = row.names, ...)
-      }
-    } else {
-      # Uma tabela
-      xlsx::write.xlsx(x, file = file, row.names = row.names, ...)
-    }
+    .Deprecated(new = 'openxlsx::write.xlsx')
+    
+    # if (inherits(x, what = "list")) {
+    # 
+    #   # Multiplas tabelas
+    #   for (i in 1:length(x)) {
+    #     xlsx::write.xlsx(
+    #       x[[i]], file = file,
+    #       # sheetName = glue::glue("sheet{i}"),
+    #       sheetName = paste("sheet", i, sep = ""),
+    #       append = TRUE, row.names = row.names, ...)
+    #   }
+    # } else {
+    #   # Uma tabela
+    #   xlsx::write.xlsx(x, file = file, row.names = row.names, ...)
+    # }
   }

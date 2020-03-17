@@ -33,8 +33,8 @@
 #' @export
 #' @examples
 # \donttest{
-#' res <- standard(variable = "ferro")
-#' head(res)
+#' #res <- standard(variable = "ferro")
+#' #head(res)
 # }
 ###############################################################################################################
 standard <-
@@ -68,7 +68,6 @@ standard <-
     
     # DESCARREGAMENTO
     ## Descarregar tabela com padrões
-    # std <- .getTable(x = "1Dalqi5JbW4fg9oNkXw5TykZTA39pR5GezapVeV0lJZI")
     std <- .getStds()
 
     # PROCESSAMENTO

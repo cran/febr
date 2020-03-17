@@ -14,20 +14,23 @@ febr2xlsx(x, file, row.names = FALSE, ...)
 \item{row.names}{(optional) Logical value indicating whether the row names of \code{x} are to be written along
 with \code{x} to the file.}
 
-\item{...}{(optional) Further arguments passed to \code{\link[xlsx]{write.xlsx}}.}
+\item{...}{(optional) Further arguments passed to write function.}
 }
 \description{
 Write data downloaded from the Free Brazilian Repository for Open Soil Data -- \emph{\strong{febr}},
 \url{http://www.ufsm.br/febr} -- to an Excel workbook.
 }
+\note{
+THIS FUNCTION IS DEPRECATED. PLEASE USE \code{\link[openxlsx]{write.xlsx}} INSTEAD.
+}
 \examples{
 \donttest{
-dts <-
-  febr::febr(dataset = "ctb0013", 
-             variable = "all",
-             merge = TRUE,
-             progress = FALSE, verbose = FALSE)
-febr2xlsx(x = dts, file = tempfile(fileext = ".xlsx"))
+# dts <-
+#   febr(dataset = "ctb0013",
+#        variable = "all",
+#        merge = TRUE,
+#        progress = FALSE, verbose = FALSE)
+# febr2xlsx(x = dts, file = tempfile(fileext = ".xlsx"))
 }
 }
 \author{
