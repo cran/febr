@@ -2,10 +2,10 @@
 % Please edit documentation in R/layer.R
 \name{layer}
 \alias{layer}
-\title{Get \emph{layer} table}
+\title{Get 'layer' table}
 \usage{
 layer(
-  dataset,
+  data.set,
   variable,
   stack = FALSE,
   missing = list(depth = "keep", data = "keep"),
@@ -14,72 +14,80 @@ layer(
     smoothing.fun = "mean", units = FALSE, round = FALSE),
   harmonization = list(harmonize = FALSE, level = 2),
   progress = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  febr.repo = NULL
 )
 }
 \arguments{
-\item{dataset}{Character vector indicating one or more datasets. Identification codes should be as recorded
-in \url{http://www.ufsm.br/febr/catalog/}. Use \code{dataset = "all"} to download all datasets.}
+\item{data.set}{Character vector indicating the identification code of one or more data sets.
+Use \code{data.set = "all"} to download all data sets.}
 
-\item{variable}{(optional) Character vector indicating one or more variables. Accepts only general
-identification codes, e.g. \code{"ferro"} and \code{"carbono"}. If missing, then a set of standard identification
-variables is downloaded. Use \code{variable = "all"} to download all variables. See \sQuote{Details} for
-more information.}
+\item{variable}{(optional) Character vector indicating one or more variables. Accepts only
+general identification codes, e.g. \code{"ferro"} and \code{"carbono"}. If missing, then a set of standard
+identification variables is downloaded. Use \code{variable = "all"} to download all variables. See
+\sQuote{Details} for more information.}
 
-\item{stack}{(optional) Logical value indicating if tables from different datasets should be stacked on a
-single table for output. Requires \code{standardization = list(units = TRUE)} -- see below. Defaults to
-\code{stack = FALSE}, the output being a list of tables.}
+\item{stack}{(optional) Logical value indicating if tables from different datasets should be
+stacked on a single table for output. Requires \code{standardization = list(units = TRUE)} -- see
+below. Defaults to \code{stack = FALSE}, the output being a list of tables.}
 
-\item{missing}{(optional) List with named sub-arguments indicating what should be done with a layer missing
-data on sampling depth, \code{depth}, or data on variable(s), \code{data}. Options are \code{"keep"} (default) and
-\code{"drop"}.}
+\item{missing}{(optional) List with named sub-arguments indicating what should be done with a
+layer missing data on sampling depth, \code{depth}, or data on variable(s), \code{data}. Options are
+\code{"keep"} (default) and \code{"drop"}.}
 
 \item{standardization}{(optional) List with named sub-arguments indicating how to perform data
-standardization.
+#' standardization.
 \itemize{
-\item \code{plus.sign} Character string indicating what should be done with the plus sign (\code{+}) commonly used
-along with the inferior limit of the bottom layer of an observation. Options are \code{"keep"} (default),
-\code{"add"}, and \code{"remove"}.
-\item \code{plus.depth} Numeric value indicating the depth increment (in centimeters) when processing the plus
-sign (\code{+}) with \code{plus.sign = "add"}. Defaults to \code{plus.depth = 2.5}.
+\item \code{plus.sign} Character string indicating what should be done with the plus sign (\code{+})
+commonly used along with the inferior limit of the bottom layer of an observation. Options are
+\code{"keep"} (default), \code{"add"}, and \code{"remove"}.
 
-\item \code{lessthan.sign} Character string indicating what should be done with the less-than sign (\code{<}) used
-to indicate that the value of a variable is below the lower limit of detection. Options are \code{"keep"}
-(default), \code{"subtract"}, and \code{"remove"}.
-\item \code{lessthan.frac} Numeric value between 0 and 1 (a fraction) by which the lower limit of detection
-should be subtracted when \code{lessthan.sign = "subtract"}. Defaults to \code{lessthan.frac = 0.5}, i.e.
-subtract 50\\% from the lower limit of detection.
+\item \code{plus.depth} Numeric value indicating the depth increment (in centimeters) when processing
+the plus sign (\code{+}) with \code{plus.sign = "add"}. Defaults to \code{plus.depth = 2.5}.
 
-\item \code{repetition} Character string indicating what should be done with repetitions, i.e. repeated
-measurements of layers in an observation. Options are \code{"keep"} (default) and \code{"combine"}. In the
-latter case, it is recommended to set \code{lessthan.sign = "subtract"} or \code{lessthan.sign = "remove"}.
-\item \code{combine.fun} Character string indicating the function that should be used to combine repeated
-measurements of layers in an observation when \code{repetition = "combine"}. Options are \code{"mean"}
-(default), \code{"min"}, \code{"max"}, and \code{"median"}.
+\item \code{lessthan.sign} Character string indicating what should be done with the less-than sign
+(\code{<}) used to indicate that the value of a variable is below the lower limit of detection.
+Options are \code{"keep"} (default), \code{"subtract"}, and \code{"remove"}.
+
+\item \code{lessthan.frac} Numeric value between 0 and 1 (a fraction) by which the lower limit of
+detection should be subtracted when \code{lessthan.sign = "subtract"}. Defaults to
+\code{lessthan.frac = 0.5}, i.e. subtract 50\\% from the lower limit of detection.
+
+\item \code{repetition} Character string indicating what should be done with repetitions, i.e.
+repeated measurements of layers in an observation. Options are \code{"keep"} (default) and
+\code{"combine"}. In the latter case, it is recommended to set \code{lessthan.sign = "subtract"} or
+\code{lessthan.sign = "remove"}.
+
+\item \code{combine.fun} Character string indicating the function that should be used to combine
+repeated measurements of layers in an observation when \code{repetition = "combine"}. Options are
+\code{"mean"} (default), \code{"min"}, \code{"max"}, and \code{"median"}.
 
 \item \code{transition} Character string indicating what should be done about the wavy and irregular
 transition between subsequent layers in an observation. Options are \code{"keep"} (default) and
 \code{"smooth"}.
-\item \code{smoothing.fun} Character string indicating the function that should be used to smooth wavy and
-irregular transitions between subsequent layers in an observation when \code{transition = "smooth"}.
-Options are \code{"mean"} (default), \code{"min"}, \code{"max"}, and \code{"median"}.
 
-\item \code{units} Logical value indicating if the measurement unit(s) of the continuous variable(s) should
-be converted to the standard measurement unit(s). Defaults to \code{units = FALSE}, i.e. no conversion is
-performed. See \code{\link[febr]{standard}} for more information.
-\item \code{round} Logical value indicating if the values of the continuous variable(s) should be rounded
-to the standard number of decimal places. Requires \code{units = TRUE}. Defaults to \code{round = FALSE}, i.e.
-no rounding is performed. See \code{\link[febr]{standard}} for more information.
+\item \code{smoothing.fun} Character string indicating the function that should be used to smooth wavy
+and irregular transitions between subsequent layers in an observation when
+\code{transition = "smooth"}. Options are \code{"mean"} (default), \code{"min"}, \code{"max"}, and \code{"median"}.
+
+\item \code{units} Logical value indicating if the measurement unit(s) of the continuous variable(s)
+should be converted to the standard measurement unit(s). Defaults to \code{units = FALSE}, i.e. no
+conversion is performed. See \code{\link[=dictionary]{dictionary()}} for more information.
+
+\item \code{round} Logical value indicating if the values of the continuous variable(s) should be
+rounded to the standard number of decimal places. Requires \code{units = TRUE}. Defaults to
+\code{round = FALSE}, i.e. no rounding is performed. See \code{\link[=dictionary]{dictionary()}} for more information.
 }}
 
-\item{harmonization}{(optional) List with named sub-arguments indicating if and how to perform data
-harmonization.
+\item{harmonization}{(optional) List with named sub-arguments indicating if and how to perform
+data harmonization.
 \itemize{
-\item \code{harmonize} Logical value indicating if data should be harmonized. Defaults to \code{harmonize = FALSE},
-i.e. no harmonization is performed.
-\item \code{level} Integer value indicating the number of levels of the identification code of the variable(s)
-that should be considered for harmonization. Defaults to \code{level = 2}. See \sQuote{Details} for more
-information.
+\item \code{harmonize} Logical value indicating if data should be harmonized. Defaults to
+\code{harmonize = FALSE}, i.e. no harmonization is performed.
+
+\item \code{level} Integer value indicating the number of levels of the identification code of the
+variable(s) that should be considered for harmonization. Defaults to \code{level = 2}. See
+\sQuote{Details} for more information.
 }}
 
 \item{progress}{(optional) Logical value indicating if a download progress bar should be displayed.}
@@ -87,53 +95,73 @@ information.
 \item{verbose}{(optional) Logical value indicating if informative messages should be displayed. Generally
 useful to identify datasets with inconsistent data. Please report to \email{febr-forum@googlegroups.com}
 if you find any issue.}
+
+\item{febr.repo}{(optional) Defaults to the remote file directory of the Federal University of
+Technology - Paraná at \url{https://cloud.utfpr.edu.br/index.php/s/Df6dhfzYJ1DDeso}.
+Alternatively, a local directory path can be informed if the user has a local copy of the data
+repository.}
 }
 \value{
-A list of data frames or a data frame with data on the chosen variable(s) of the chosen dataset(s).
+A \code{list} of \code{data.frame}s or a \code{data.frame} with, possibly standardize or harmonized,
+data of the chosen variable(s) of the chosen dataset(s).
 }
 \description{
-Download data from the \emph{layer} ("camada") table of one or more datasets contained in the Free Brazilian
-Repository for Open Soil Data -- \emph{\strong{febr}}, \url{http://www.ufsm.br/febr}. This includes sampling depth,
-horizon designation, and variables such as pH, carbon content, clay content, and much more. Use
-\code{\link[febr]{header}} if you want to check what are the variables contained in the \emph{layer} table of a
-dataset before downloading it.
+Download data from the 'layer' ("camada") table of one or more datasets published in
+the \href{https://www.pedometria.org/febr/}{Data Repository of the Brazilian Soil}. This
+table includes data such as sampling depth, horizon designation, and variables such as pH, carbon
+and clay content, and much more.
 }
 \details{
-\subsection{Standard identification variables}{
-Standard identification variables and their content are as follows:
+\subsection{Default variables}{
+Default variables (fields) present in the 'layer' table are as follows:
 \itemize{
-\item \code{dataset_id}. Identification code of the dataset in \emph{\strong{febr}} to which an observation belongs.
-\item \code{observacao_id}. Identification code of an observation in a dataset.
+\item \code{dataset_id}. Identification of the dataset in FEBR to which an observation belongs.
+\item \code{evento_id_febr}. Identification code of an observation in a dataset.
 \item \code{camada_id}. Sequential layer number, from top to bottom.
-\item \code{camada_nome}. Layer designation according to some standard description guide.
+\item \code{camada_altid}. Layer designation according to some standard description guide.
 \item \code{amostra_id}. Laboratory number of a sample.
 \item \code{profund_sup}. Upper boundary of a layer (cm).
 \item \code{profund_inf}. Lower boundary of a layer (cm).
 }
-Further details about the content of the standard identification variables can be found in
-\url{https://docs.google.com/document/d/1Bqo8HtitZv11TXzTviVq2bI5dE6_t_fJt0HE-l3IMqM} (in Portuguese).
+Further details about the content of the default variables (fields) can be found in
+\url{https://docs.google.com/document/d/1Bqo8HtitZv11TXzTviVq2bI5dE6_t_fJt0HE-l3IMqM}
+(in Portuguese).
 }
-
 \subsection{Harmonization}{
-Data harmonization consists of converting the values of a variable determined using some method \emph{B} so
-that they are (approximately) equivalent to the values that would have been obtained if the standard method
-\emph{A} had been used instead. For example, converting carbon content values obtained using a wet digestion
-method to the standard dry combustion method is data harmonization.
+Data harmonization consists of converting the values of a variable determined using some method
+\emph{B} so that they are (approximately) equivalent to the values that would have been obtained if
+the standard method \emph{A} had been used instead. For example, converting carbon content values
+obtained using a wet digestion method to the standard dry combustion method is data
+harmonization.
 
-A heuristic data harmonization procedure is implemented in the \strong{febr} package. It consists of grouping
-variables based on a chosen number of levels of their identification code. For example, consider a variable
-with an identification code composed of four levels, \code{aaa_bbb_ccc_ddd}, where \code{aaa} is the first level and
-\code{ddd} is the fourth level. Now consider a related variable, \code{aaa_bbb_eee_fff}. If the harmonization
-is to consider all four coding levels (\code{level = 4}), then these two variables will remain coded as
-separate variables. But if \code{level = 2}, then both variables will be re-coded as \code{aaa_bbb}, thus becoming the
-same variable.
+A heuristic data harmonization procedure is implemented in the \strong{febr} package. It consists of
+grouping variables based on a chosen number of levels of their identification code. For example,
+consider a variable with an identification code composed of four levels, \code{aaa_bbb_ccc_ddd}, where
+\code{aaa} is the first level and \code{ddd} is the fourth level. Now consider a related variable,
+\code{aaa_bbb_eee_fff}. If the harmonization is to consider all four coding levels (\code{level = 4}),
+then these two variables will remain coded as separate variables. But if \code{level = 2}, then both
+variables will be re-coded as \code{aaa_bbb}, thus becoming the same variable.
 }
 }
 \examples{
-res <- layer(dataset = "ctb0013")
+if (interactive()) {
+res <- layer(data.set = "ctb0003")
+
+# Download two data sets and standardize units
+res <- layer(
+  data.set = paste("ctb000", 4:5, sep = ""),
+  variable = "carbono", stack = TRUE,
+  standardization = list(units = TRUE))
+
+# Try to download a data set that is not available yet
+res <- layer(data.set = "ctb0020")
+
+# Try to download a non existing data set
+# res <- observation(data.set = "ctb0000")
+}
 }
 \seealso{
-\code{\link[febr]{observation}}, \code{\link[febr]{standard}}, \code{\link[febr]{unit}}
+\code{\link[=readFEBR]{readFEBR()}}, \code{\link[=observation]{observation()}}, \code{\link[=dictionary]{dictionary()}}, \code{\link[=unit]{unit()}}
 }
 \author{
 Alessandro Samuel-Rosa \email{alessandrosamuelrosa@gmail.com}

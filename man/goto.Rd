@@ -2,30 +2,49 @@
 % Please edit documentation in R/goto.R
 \name{goto}
 \alias{goto}
-\title{Go to \emph{\strong{febr}}}
+\title{Go to the Data Repository of the Brazilian Soil}
 \usage{
-goto(dataset, table, page)
+goto(data.set, page)
 }
 \arguments{
-\item{dataset}{(optional) Character vector indicating one dataset. The identification code should be as
-recorded in \url{http://www.ufsm.br/febr/catalog/}.}
+\item{data.set}{(optional) Character vector indicating a (unique) dataset whose
+metadata web page you wish to visit.}
 
-\item{table}{(optional) Character string indicating a table, i.e. the \emph{dataset} table, \code{"dataset"}, the
-\emph{observation} table, \code{"observacao"}, the \emph{layer} table, \code{"camada"}, or the \emph{metadata} table, \code{"metadado"}.}
-
-\item{page}{(optional) Character string indicating a web page of the \emph{\strong{febr}}. Options are: \code{"febr"},
-\code{"view"}, \code{"catalog"}, \code{"search"}, \code{"book"}, \code{"package"}, \code{"github"}, \code{"forum"}, \code{"units"}, \code{"standards"},
-and \code{"index"}.}
+\item{page}{(optional) Character string indicating a web page of the Data Repository of the
+Brazilian Soil, with options:
+\itemize{
+\item \code{"febr"}: FEBR main web page,
+\item \code{"dictionary"}: FEBR data dictionary and vocabulary,
+\item \code{"forum"}: FEBR public forum at Google Groups,
+\item \code{"github"}: \strong{febr} package source code repository on GitHub,
+\item \code{"index"}: FEBR data set index,
+\item \code{"search"}: data set search web page,
+\item \code{"package"}: \strong{febr} package on CRAN,
+\item \code{"template"}: FEBR spreadsheet template on Google Sheets,
+\item \code{"units"}: units and conversion factors used in FEBR.
+}}
+}
+\value{
+Load a given URL into an HTML browser via \code{\link[utils:browseURL]{utils::browseURL()}}.
 }
 \description{
-Go to one of the web pages of the Free Brazilian Repository for Open Soil Data -- \emph{\strong{febr}} --, including
-project and dataset web pages.
+Visit the web assets of the
+\href{https://www.pedometria.org/febr/}{Data Repository of the Brazilian Soil}.
 }
 \examples{
-\donttest{
-# Go to the main project page
+if (interactive()) {
+# Go to the FEBR web page
 goto(page = "febr")
+
+# Go to the data set index
+goto(page = "index")
+
+# Go to the GitHub repository
+goto(page = "github")
 }
+}
+\seealso{
+\code{\link[utils:browseURL]{utils::browseURL()}}
 }
 \author{
 Alessandro Samuel-Rosa \email{alessandrosamuelrosa@gmail.com}

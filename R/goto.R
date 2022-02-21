@@ -1,117 +1,97 @@
-#' Go to ___febr___
-#' 
-#' Go to one of the web pages of the Free Brazilian Repository for Open Soil Data -- ___febr___ --, including
-#' project and dataset web pages.
-#' 
-#' @param dataset (optional) Character vector indicating one dataset. The identification code should be as
-#' recorded in \url{http://www.ufsm.br/febr/catalog/}.
-#' 
-#' @param table (optional) Character string indicating a table, i.e. the *dataset* table, `"dataset"`, the
-#' *observation* table, `"observacao"`, the *layer* table, `"camada"`, or the *metadata* table, `"metadado"`.
-#' 
-#' @param page (optional) Character string indicating a web page of the ___febr___. Options are: `"febr"`,
-#' `"view"`, `"catalog"`, `"search"`, `"book"`, `"package"`, `"github"`, `"forum"`, `"units"`, `"standards"`,
-#' and `"index"`.
-#' 
+#' @title Go to the Data Repository of the Brazilian Soil
+#' @description Visit the web assets of the
+#' [Data Repository of the Brazilian Soil](https://www.pedometria.org/febr/).
+#' @param data.set (optional) Character vector indicating a (unique) dataset whose
+#' metadata web page you wish to visit.
+#' @param page (optional) Character string indicating a web page of the Data Repository of the
+#' Brazilian Soil, with options:
+#' * `"febr"`: FEBR main web page,
+#' * `"dictionary"`: FEBR data dictionary and vocabulary,
+#' * `"forum"`: FEBR public forum at Google Groups,
+#' * `"github"`: **febr** package source code repository on GitHub,
+#' * `"index"`: FEBR data set index,
+#' * `"search"`: data set search web page,
+#' * `"package"`: **febr** package on CRAN,
+#' * `"template"`: FEBR spreadsheet template on Google Sheets,
+#' * `"units"`: units and conversion factors used in FEBR.
+#' @return Load a given URL into an HTML browser via [utils::browseURL()].
+#' @seealso [utils::browseURL()]
 #' @author Alessandro Samuel-Rosa \email{alessandrosamuelrosa@@gmail.com}
 #' @export
 #' @examples
-#' \donttest{
-#' # Go to the main project page
+#' if (interactive()) {
+#' # Go to the FEBR web page
 #' goto(page = "febr")
+#'
+#' # Go to the data set index
+#' goto(page = "index")
+#'
+#' # Go to the GitHub repository
+#' goto(page = "github")
 #' }
-###############################################################################################################
+####################################################################################################
 goto <-
-  function (dataset, table, page) {
-    
-    # ARGUMENTOS
-    ## dataset
-    if (!missing(dataset)) {
-      if (!is.character(dataset)) {
-        stop (glue::glue("object of class '{class(dataset)}' passed to argument 'dataset'"))
+  function(data.set, page) {
+    # ARGUMENTS
+    ## data.set
+    if (!missing(data.set)) {
+      if (!is.character(data.set)) {
+        stop(paste0("object of class '", class(data.set), "' passed to argument 'data.set'"))
       }
-      if (length(dataset) > 1) {
-        stop ("a single identification code must be passed to argument 'dataset'")
-      }
-    }
-    
-    ## table
-    if (!missing(table)) {
-      if (!is.character(table)) {
-        stop (glue::glue("object of class '{class(table)}' passed to argument 'table'"))
-      }
-      if (!table %in% c("dataset", "observacao", "camada", "metadado")) {
-        stop (glue::glue("unknown value '{table}' passed to argument 'table'"))
+      if (length(data.set) > 1) {
+        stop("a single identification code must be passed to argument 'data.set'")
       }
     }
-    
     ## page
     if (!missing(page)) {
       if (!is.character(page)) {
-        stop (glue::glue("object of class '{class(page)}' passed to argument 'page'"))
+        stop(paste0("object of class '", class(page), "}' passed to argument 'page'"))
       }
-      ops <- c("febr", "view", "catalog", "search", "book", "package", "github", "forum", "units", "standards",
-               "index", "template")
+      ops <-
+        c("febr", "search", "package", "github", "forum", "units", "dictionary", "index",
+        "template")
       if (!page %in% ops) {
-        stop (glue::glue("unknown value '{page}' passed to argument 'page'"))
+        stop (paste0("unknown value '", page, "' passed to argument 'page'"))
       }
     }
-    
     ## Identificar URL
-    if (missing(dataset) && missing(table) && !missing(page)) { # Ir para alguma página do projeto
+    if (missing(data.set) && !missing(page)) { # Ir para alguma página do projeto
+      gs <- "https://docs.google.com/spreadsheets/d/"
       switch (page,
         febr = {
-          url <- "http://coral.ufsm.br/febr/"
+          url <- "https://www.pedometria.org/febr/"
           },
-        view = {
-          url <- "http://coral.ufsm.br/febr/view"
-        },
-        catalog = {
-          url <- "http://coral.ufsm.br/febr/catalog/"
-        },
         search = {
-          # url <- "http://coral.ufsm.br/febr/search"
-          url <- 'https://pedometria.shinyapps.io/febr/'
-        },
-        book = {
-          # url <- "http://coral.ufsm.br/febr/book/"
-          url <- 'https://docs.google.com/document/d/1Bqo8HtitZv11TXzTviVq2bI5dE6_t_fJt0HE-l3IMqM'
+          url <- "https://www.pedometria.org/febr/buscar/"
         },
         package = {
-          url <- "https://febr-team.github.io/febr-package/"
+          url <- "https://CRAN.R-project.org/package=febr"
         },
         github = {
-          url <- "https://github.com/febr-team"
+          url <- "https://github.com/laboratorio-de-pedometria/febr-package"
         },
         forum = {
           url <- "https://groups.google.com/forum/#!forum/febr-forum"
         },
         units = {
-          url <- "https://docs.google.com/spreadsheets/d/1tU4Me3NJqk4NH2z0jvMryGObSSQLCvGqdLEL5bvOflo"
+          url <- paste0(gs, "1tU4Me3NJqk4NH2z0jvMryGObSSQLCvGqdLEL5bvOflo")
         },
-        standards = {
-          url <- "https://docs.google.com/spreadsheets/d/1Dalqi5JbW4fg9oNkXw5TykZTA39pR5GezapVeV0lJZI"
+        dictionary = {
+          url <- paste0(gs, "1Dalqi5JbW4fg9oNkXw5TykZTA39pR5GezapVeV0lJZI")
         },
         index = {
-          url <- "https://docs.google.com/spreadsheets/d/1Z0JwcmRRUDCyTB9yFlvHPsN6mCSQPzSczIOv88SPtcw"
+          url <- "https://cloud.utfpr.edu.br/index.php/apps/onlyoffice/s/JDcb8XBvkpQeyXm"
         },
         template = {
-          url <- "https://docs.google.com/spreadsheets/d/1crDNClXIzAuZNQLILKMMYk9rgCdYsZimX2Z2dKK6Ivo"
+          url <- paste0(gs, "1rXIiT1zSYhFegSdAvE0yJX16q-bvXVNpYIYdd5YgjhI")
         }
       )
-      
-    } else if (missing(table) && missing(page) && !missing(dataset)) { # Ir para página do conjunto de dados
-      url <- glue::glue("http://coral.ufsm.br/febr/catalog/{dataset}.html")
-      
-    } else { # Ir para tabela do conjunto de dados no GoogleDrive
-      sheets_keys <- .getSheetsKeys(dataset = dataset)
-      url <- paste('https://docs.google.com/spreadsheets/d/', sheets_keys[[table]], sep = '')
-      # key <- googlesheets::gs_key(x = sheets_keys[[table]], verbose = FALSE)
-      # url <- key$browser_url
+    } else if (missing(page) && !missing(data.set)) { # Ir para diretório do conjunto de dados
+      # url <- paste0("https://cloud.utfpr.edu.br/index.php/s/Df6dhfzYJ1DDeso?path=%2F", data.set)
+      url <- paste0(.opt()$owncloud, data.set)
     }
-    
     ## Lançar navegador
     if (!is.null(url)) {
-      utils::browseURL(url)
+      utils::browseURL(url = url)
     }
   }

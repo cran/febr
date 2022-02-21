@@ -1,27 +1,30 @@
-#' @title Get 'metadata' table
-#' @description Download data from the 'metadata' ("metadado") table of one or more datasets
-#' published in the [Data Repository of the Brazilian Soil](https://www.pedometria.org/febr/).
-#' This table includes data such as variable names, description of analytical methods, and
-#' identification of analysis laboratories.
-#' @template metadata_template
+#' @title Get 'identification' table
+#' @description Download data from the 'identification' ("identificacao") table of one or more soil
+#' datasets published in the
+#' [Data Repository of the Brazilian Soil](https://www.pedometria.org/febr/). This table includes
+#' data such as dataset title and description, author and institution, data license, and much more.
+#'
 #' @param febr.repo (optional) Defaults to the remote file directory of the Federal University of
 #' Technology - Paraná at \url{https://cloud.utfpr.edu.br/index.php/s/Df6dhfzYJ1DDeso}. 
 #' Alternatively, a local directory path can be informed if the user has a local copy of the data
 #' repository.
 #'
-#' @return A list of data frames or a data frame with metadata of the chosen dataset(s).
+#' @template metadata_template
+#'
+#' @return A list of data frames or a data frame with data of the chosen dataset(s).
+#'
 #' @note Check the new core data download function [febr::readFEBR()].
+#'
 #' @author Alessandro Samuel-Rosa \email{alessandrosamuelrosa@@gmail.com}
 #' @export
 #' @examples
 #' \donttest{
-#' # res <- metadata(data.set = c("ctb0003", "ctb0020"))
+#' # res <- identification(data.set = c("ctb0003", "ctb0000"))
 #' res <- metadata(data.set = c("ctb0003", "ctb0002"))
 #' }
 ####################################################################################################
-metadata <-
+identification <-
   function(data.set, progress = TRUE, verbose = TRUE, febr.repo = NULL) {
-    
     # ARGUMENT CHECK ----
     ## data.set
     if (missing(data.set)) {
@@ -42,7 +45,7 @@ metadata <-
     n_datasets <- length(dataset_ids)
     ## progress
     if (!is.logical(progress)) {
-      stop(paste0("object of class ", class(progress), "passed to 'progress'"))
+      stop(paste0("object of class ", class(progress), " passed to 'progress'"))
     }
     ## verbose
     if (!is.logical(verbose)) {
@@ -56,11 +59,13 @@ metadata <-
     }
     res <- list()
     for (i in seq_along(dataset_ids)) {
+      # Mensagens informativas
       if (verbose) {
-        message(paste0(ifelse(progress, "\n", ""), "Reading ", dataset_ids[i], "-metadado..."))
+        message(paste0(ifelse(progress, "\n", ""), "Reading ", dataset_ids[i], "-identificacao..."))
       }
+      # Dados processados
       res[[i]] <- .readFEBR(
-        data.set = dataset_ids[i], data.table = "metadado", febr.repo = febr.repo)
+        data.set = dataset_ids[i], data.table = "identificacao", febr.repo = febr.repo)
       if (progress) {
         utils::setTxtProgressBar(pb, i)
       }
